@@ -10,22 +10,6 @@ jobs:
   backend-build:
     name: Backend (Java)
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:15-alpine
-        env:
-          POSTGRES_DB: beneficiodb
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-        ports:
-          - 5432:5432
-        volumes:
-          - ${{ github.workspace }}/db:/docker-entrypoint-initdb.d
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       
@@ -36,20 +20,8 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Build Core Module
-        working-directory: ./ejb-module
-        run: mvn clean install -DskipTests
-
-      - name: Build and Test Infrastructure Module
-        working-directory: ./backend-module
-        run: mvn verify
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/beneficiodb
-          SPRING_DATASOURCE_USERNAME: postgres
-          SPRING_DATASOURCE_PASSWORD: password
-          SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-          SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
-          SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      - name: Build and Test All Modules
+        run: mvn clean verify
 
   frontend-build:
     name: Frontend (Angular)
