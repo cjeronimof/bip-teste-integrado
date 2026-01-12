@@ -1,6 +1,6 @@
-# Infrastructure Module (Adapters & Frameworks)
+# backend-module
 
-Este módulo é responsável por fazer a conexão entre o "Mundo Real" e o `Core` (Domínio).
+Este módulo é responsável por fazer a conexão entre o "Mundo Real" e o `ejb-module` (Domínio).
 
 ## 🛠️ Tecnologias
 - **Spring Boot 3.2**: Framework de aplicação.

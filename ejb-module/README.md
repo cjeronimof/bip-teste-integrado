@@ -1,4 +1,4 @@
-# Core Module (Domain Layer)
+# ejb-module
 
 Este é o **coração** da aplicação. Ele encapsula toda a lógica de negócio e as regras do domínio.
 

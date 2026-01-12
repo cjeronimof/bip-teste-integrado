@@ -1,49 +1,46 @@
-# 🏗️ Bip Teste Integrado - Enterprise Refactored
+# 🏗️ Desafio Fullstack Integrado
+🚨 Instrução Importante (LEIA ANTES DE COMEÇAR)
+❌ NÃO faça fork deste repositório.
 
-Solução Fullstack (Java + Angular) refatorada com **Clean Architecture** pura, pronta para produção e containerizada.
+Este repositório é fornecido como modelo/base. Para realizar o desafio, você deve:
+✅ Opção correta (obrigatória)
+Clique em “Use this template” (se este repositório estiver marcado como Template)
+OU
+Clone este repositório e crie um NOVO repositório público em sua conta GitHub.
+📌 O resultado deve ser um repositório próprio, independente deste.
 
-## 🏛️ Nova Arquitetura Enterprise
+## 🎯 Objetivo
+Criar solução completa em camadas (DB, EJB, Backend, Frontend), corrigindo bug em EJB e entregando aplicação funcional.
 
-Este projeto foi reestruturado seguindo princípios estritos de Clean Architecture, separação de responsabilidades e padrões sênior.
+## 📦 Estrutura
+- db/: scripts schema e seed
+- ejb-module/: serviço EJB com bug a ser corrigido
+- backend-module/: backend Spring Boot
+- frontend/: app Angular
+- docs/: instruções e critérios
+- .github/workflows/: CI
 
-```mermaid
-graph TD
-    subgraph "Frontend Layer"
-        Angular[Angular UI]
-    end
+## ✅ Tarefas do candidato
+1. Executar db/schema.sql e db/seed.sql
+2. Corrigir bug no BeneficioEjbService
+3. Implementar backend CRUD + integração com EJB
+4. Desenvolver frontend Angular consumindo backend
+5. Implementar testes
+6. Documentar (Swagger, README)
+7. Submeter via fork + PR
 
-    subgraph "Infrastructure Layer (Spring Boot)"
-        Controller[REST Controller]
-        JPA[JPA Adapters]
-        Config[Spring Configuration]
-    end
+## 🐞 Bug no EJB
+- Transferência não verifica saldo, não usa locking, pode gerar inconsistência
+- Espera-se correção com validações, rollback, locking/optimistic locking
 
-    subgraph "Core Layer (Pure Java)"
-        UseCase[Use Cases]
-        Domain[Domain Entities]
-        Ports[Input/Output Ports]
-    end
-
-    Angular -->|HTTP/REST| Controller
-    Controller -->|Implements| UseCase
-    UseCase -->|Manipulates| Domain
-    UseCase -->|Uses| Ports
-    JPA -->|Implements| Ports
-    JPA -->|Persists| DB[(PostgreSQL)]
-```
-
-### Módulos
-
-1.  **`core`**: O "Santuário". Contém apenas regras de negócio puras (Java 17). **Zero Frameworks**.
-    *   *Domain*: Entidades ricas (`Beneficio`).
-    *   *Application*: Portas (`RepositoryPort`) e Casos de Uso (`TransferenciaUseCase`).
-2.  **`infrastructure`**: O "Mundo Real". Spring Boot 3, JPA, Docker.
-    *   *Web*: Controllers REST e DTOs.
-    *   *Persistence*: Entidades JPA e Repositórios Spring Data.
-    *   *Config*: Injeção de dependência dos UseCases.
-3.  **`frontend`**: Interface Angular com Material Design.
-
----
+## 📊 Critérios de avaliação
+- Arquitetura em camadas (20%)
+- Correção EJB (20%)
+- CRUD + Transferência (15%)
+- Qualidade de código (10%)
+- Testes (15%)
+- Documentação (10%)
+- Frontend (10%)
 
 ## 🚀 Como Executar (Docker Compose)
 
@@ -74,17 +71,17 @@ Se preferir rodar os serviços individualmente.
 *   Maven 3.8+
 *   Node.js 18+
 
-### 1. Build do Backend (Reactor)
+### 1. Build do Backend
 ```bash
 # Na raiz do projeto
 mvn clean install
 ```
 
-### 2. Rodar a Infraestrutura (Spring Boot)
+### 2. Rodar a backend-module
 O backend usa H2 (em memória) por padrão se não houver variáveis de ambiente PostgreSQL configuradas.
 
 ```bash
-cd infrastructure
+cd backend-module
 mvn spring-boot:run
 ```
 *   API: http://localhost:8080
@@ -101,15 +98,15 @@ npm start
 
 ## 🧪 Testes
 
-### Unitários (Domain)
+### Unitários
 ```bash
-cd core
+cd ejb-module
 mvn test
 ```
 
-### Integração (Infrastructure)
+### Integração
 ```bash
-cd infrastructure
+cd backend-module
 mvn test
 ```
 
