@@ -1,0 +1,85 @@
+<div class="container">
+    <div class="breadcrumb">
+        <div class="breadcrumb-item"><a routerLink="/beneficios">Benefícios</a></div>
+        <div class="breadcrumb-separator">/</div>
+        <div class="breadcrumb-item active">Transferência</div>
+    </div>
+    <mat-card class="transfer-card">
+        <mat-card-header>
+            <mat-card-title>💸 Transferência de Valores</mat-card-title>
+            <mat-card-subtitle>Transfira valores entre benefícios ativos</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <!-- Loading -->
+            <div *ngIf="loading" class="loading-overlay">
+                <mat-spinner diameter="40"></mat-spinner>
+            </div>
+
+            <!-- Form -->
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="transfer-form">
+
+                <div class="transfer-grid">
+                    <!-- Origem -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Benefício de Origem</mat-label>
+                        <mat-select formControlName="origemId">
+                            <mat-option *ngFor="let beneficio of beneficios" [value]="beneficio.id">
+                                {{ beneficio.nome }} ({{ formatCurrency(beneficio.valor) }})
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('origemId')?.hasError('required')">Selecione a origem</mat-error>
+                        <mat-hint *ngIf="form.get('origemId')?.value && form.get('valor')?.value"
+                            class="saldo-hint danger-text">
+                            Novo Saldo: {{ getSaldoOrigemPrevisto() }}
+                        </mat-hint>
+                    </mat-form-field>
+
+                    <div class="arrow-separator">
+                        <mat-icon>arrow_forward</mat-icon>
+                    </div>
+
+                    <!-- Destino -->
+                    <mat-form-field appearance="outline" class="field-dest">
+                        <mat-label>Benefício de Destino</mat-label>
+                        <mat-select formControlName="destinoId">
+                            <mat-option *ngFor="let beneficio of beneficios" [value]="beneficio.id">
+                                {{ beneficio.nome }} ({{ formatCurrency(beneficio.valor) }})
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('destinoId')?.hasError('required')">Selecione o destino</mat-error>
+                        <mat-hint *ngIf="form.get('destinoId')?.value && form.get('valor')?.value"
+                            class="saldo-hint success-text">
+                            Novo Saldo: {{ getSaldoDestinoPrevisto() }}
+                        </mat-hint>
+                    </mat-form-field>
+                </div>
+
+                <!-- Valor -->
+                <mat-form-field appearance="outline" class="valor-field">
+                    <mat-label>Valor da Transferência</mat-label>
+                    <input matInput type="text" formControlName="valor" appCurrencyMask placeholder="R$ 0,00"
+                        autocomplete="off">
+                    <mat-error *ngIf="form.get('valor')?.hasError('required')">Informe o valor</mat-error>
+                    <mat-error *ngIf="form.get('valor')?.hasError('min')">Valor inválido</mat-error>
+                </mat-form-field>
+
+                <div class="form-actions">
+                    <button mat-button type="button" (click)="cancel()">Cancelar</button>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="submitting || !form.valid">
+                        <span *ngIf="!submitting">Transferir</span>
+                        <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+
+    <div class="info-box mat-elevation-z2">
+        <h3><mat-icon>info</mat-icon> Informações Importantes</h3>
+        <ul>
+            <li>Apenas benefícios ativos podem realizar e receber transferências</li>
+            <li>O saldo de origem deve ser suficiente para cobrir o valor da transferência</li>
+        </ul>
+    </div>
+</div>
