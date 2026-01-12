@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Database Service (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    container_name: bip-db
+    environment:
+      POSTGRES_DB: beneficiodb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d
+    networks:
+      - bip-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend Service (Spring Boot)
+  backend:
+    build:
+      context: .
+      dockerfile: backend-module/Dockerfile
+    container_name: bip-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/beneficiodb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: 'true'
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - bip-network
+
+  # Frontend Service (Angular + Nginx)
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: bip-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - bip-network
+
+volumes:
+  db_data:
+
+
+networks:
+  bip-network:
+    driver: bridge

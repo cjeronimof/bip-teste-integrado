@@ -1,0 +1,71 @@
+<div class="container is-mac">
+    <div class="breadcrumb">
+        <div class="breadcrumb-item"><a routerLink="/beneficios">Benefícios</a></div>
+        <div class="breadcrumb-separator">/</div>
+        <div class="breadcrumb-item active">{{ isEditMode ? 'Editar' : 'Novo' }}</div>
+    </div>
+
+    <mat-card class="form-card">
+        <mat-card-header>
+            <mat-icon mat-card-avatar color="primary">{{ isEditMode ? 'edit' : 'add_circle' }}</mat-icon>
+            <mat-card-title>{{ isEditMode ? 'Editar Benefício' : 'Novo Benefício' }}</mat-card-title>
+            <mat-card-subtitle>Informe os detalhes do benefício abaixo</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <!-- Loading Overlay -->
+            <div *ngIf="loading" class="loading-overlay">
+                <mat-spinner diameter="40"></mat-spinner>
+            </div>
+
+            <!-- Form -->
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="beneficio-form">
+
+                <!-- Grid Row: Nome & Valor -->
+                <div class="form-grid-row">
+                    <!-- Nome -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nome do Benefício</mat-label>
+                        <input matInput formControlName="nome" placeholder="Ex: Vale Refeição" autocomplete="off">
+                        <mat-error *ngIf="form.get('nome')?.hasError('required')">O nome é obrigatório</mat-error>
+                        <mat-error *ngIf="form.get('nome')?.hasError('maxlength')">Máximo de 100 caracteres</mat-error>
+                    </mat-form-field>
+
+                    <!-- Valor (Currency Mask) -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Valor</mat-label>
+                        <input matInput formControlName="valor" appCurrencyMask placeholder="R$ 0,00"
+                            autocomplete="off">
+                        <mat-error *ngIf="form.get('valor')?.hasError('required')">O valor é obrigatório</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- Descrição (Full Width) -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Descrição</mat-label>
+                    <textarea matInput formControlName="descricao" rows="3"
+                        placeholder="Insira uma descrição detalhada (opcional)"></textarea>
+                    <mat-hint align="end">{{form.get('descricao')?.value?.length || 0}}/255</mat-hint>
+                    <mat-error *ngIf="form.get('descricao')?.hasError('maxlength')">Máximo de 255 caracteres</mat-error>
+                </mat-form-field>
+
+                <!-- Actions Footer -->
+                <div class="form-actions">
+                    <!-- Ativo Checkbox (Left or Top on Mobile) -->
+                    <div class="checkbox-section">
+                        <mat-checkbox formControlName="ativo" color="primary">Benefício Ativo</mat-checkbox>
+                    </div>
+
+                    <!-- Buttons -->
+                    <button mat-button type="button" (click)="cancel()">Cancelar</button>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="submitting || form.invalid">
+                        <span *ngIf="!submitting">{{ isEditMode ? 'Salvar Alterações' : 'Criar Benefício' }}</span>
+                        <mat-spinner *ngIf="submitting" diameter="20" color="accent"
+                            style="display:inline-block; vertical-align:middle"></mat-spinner>
+                    </button>
+                </div>
+
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

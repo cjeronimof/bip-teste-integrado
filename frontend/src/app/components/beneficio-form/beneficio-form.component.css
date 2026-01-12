@@ -1,0 +1,177 @@
+/* Main Container - Centered Card Look */
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Breadcrumb Styling */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    color: #64748b;
+    /* Slate-500 */
+}
+
+.breadcrumb-item a {
+    color: #3b82f6;
+    /* Blue-500 */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.breadcrumb-item a:hover {
+    color: #1d4ed8;
+    /* Blue-700 */
+    text-decoration: underline;
+}
+
+.breadcrumb-separator {
+    margin: 0 0.75rem;
+    color: #cbd5e1;
+    /* Slate-300 */
+}
+
+.breadcrumb-item.active {
+    color: #334155;
+    /* Slate-700 */
+    font-weight: 600;
+}
+
+/* Card Styling Override */
+.form-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    background: white;
+    overflow: hidden;
+}
+
+mat-card-header {
+    background-color: #f8fafc;
+    /* Slate-50 */
+    padding: 1.5rem 2rem 1rem !important;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+mat-card-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    color: #1e293b;
+    /* Slate-800 */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+mat-card-subtitle {
+    margin-top: 0.5rem !important;
+    font-size: 0.9rem !important;
+    color: #64748b !important;
+}
+
+mat-card-content {
+    padding: 2rem !important;
+}
+
+/* Form Layout Grid */
+.beneficio-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-grid-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    /* Name takes 2/3, Value takes 1/3 */
+    gap: 1.5rem;
+}
+
+/* Material Field Overrides for Full Width */
+mat-form-field {
+    width: 100%;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Actions Footer */
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* Right align buttons standard */
+    gap: 1rem;
+    padding-top: 1.5rem;
+    margin-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* Checkbox alignment */
+.checkbox-section {
+    margin-right: auto;
+    /* Pushes buttons to the right */
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    backdrop-filter: blur(2px);
+    border-radius: 12px;
+}
+
+/* Media Query for Mobile */
+@media (max-width: 640px) {
+    .form-grid-row {
+        grid-template-columns: 1fr;
+        /* Stack on mobile */
+        gap: 1rem;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+        /* Buttons stack, Checkbox on top or bottom */
+        align-items: stretch;
+    }
+
+    .checkbox-section {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    mat-card-header {
+        padding: 1rem 1.5rem !important;
+    }
+
+    mat-card-content {
+        padding: 1.5rem !important;
+    }
+}

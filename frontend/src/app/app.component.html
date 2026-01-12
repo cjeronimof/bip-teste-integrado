@@ -1,0 +1,28 @@
+<div class="app-container">
+  <mat-toolbar color="primary" class="navbar">
+    <span class="brand">
+      <mat-icon>diamond</mat-icon>
+      BenefitsApp
+    </span>
+    <span class="spacer"></span>
+    <div class="nav-links">
+      <button mat-button routerLink="/beneficios" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        Lista
+      </button>
+      <button mat-button routerLink="/beneficios/novo" routerLinkActive="active">
+        Novo
+      </button>
+      <button mat-raised-button color="accent" routerLink="/transferencia" class="btn-transfer">
+        Transferir
+      </button>
+    </div>
+  </mat-toolbar>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 BenefitsApp - Sistema Integrado de Gestão de Benefícios</p>
+  </footer>
+</div>
